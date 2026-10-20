@@ -1,0 +1,314 @@
+// ========================================================
+// 1. CREDENTIALS & INITIALIZATION (EMAILJS & FIREBASE)
+// ========================================================
+const EMAILJS_PUBLIC_KEY = "5I_LUi2CKLqd2bYPS";
+const EMAILJS_SERVICE_ID = "service_45tqcgh";
+const EMAILJS_TEMPLATE_ID = "template_m1q10cm";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAHFRrscUtVNQh_yR0OU_SsD29tqJKOlz0",
+  authDomain: "portfolio-visitors-2490c.firebaseapp.com",
+  projectId: "portfolio-visitors-2490c",
+  storageBucket: "portfolio-visitors-2490c.firebasestorage.app",
+  messagingSenderId: "326782501150",
+  appId: "1:326782501150:web:7a7c5b72a32257bbc7c90f",
+  measurementId: "G-XLWS6MG24X"
+};
+
+// Initialize EmailJS & Firebase
+emailjs.init(EMAILJS_PUBLIC_KEY);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let generatedOtp = null;
+let visitorData = {};
+
+// ========================================================
+// 2. OTP AUTHENTICATION GATEWAY
+// ========================================================
+function checkGateAccess() {
+  const isVerified = localStorage.getItem("portfolio_access_granted");
+  const authGateModal = document.getElementById("authGateModal");
+
+  if (isVerified === "true") {
+    authGateModal.classList.add("hidden");
+    document.body.style.overflow = "";
+  } else {
+    authGateModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function handleSendOtp(e) {
+  e.preventDefault();
+  const nameInput = document.getElementById("visitorName");
+  const emailInput = document.getElementById("visitorEmail");
+  const sendOtpBtn = document.getElementById("sendOtpBtn");
+
+  visitorData.name = nameInput.value.trim();
+  visitorData.email = emailInput.value.trim();
+
+  // Generate 6-digit random code
+  generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  sendOtpBtn.disabled = true;
+  sendOtpBtn.innerHTML = `
+    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+    </svg>
+    <span>Sending OTP...</span>
+  `;
+
+  const templateParams = {
+    to_name: visitorData.name,
+    to_email: visitorData.email,
+    otp_code: generatedOtp,
+  };
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+    .then(() => {
+      showOtpInputScreen();
+      showToast("OTP sent successfully to your email!");
+    })
+    .catch((error) => {
+      console.error("EmailJS Error:", error);
+      showToast("Failed to send OTP. Please try again.");
+      sendOtpBtn.disabled = false;
+      sendOtpBtn.innerHTML = `
+        <i data-lucide="send" class="w-4 h-4"></i>
+        <span>Send Verification OTP</span>
+      `;
+      lucide.createIcons();
+    });
+}
+
+function showOtpInputScreen() {
+  document.getElementById("gateDetailsForm").classList.add("hidden");
+  document.getElementById("gateOtpForm").classList.remove("hidden");
+  document.getElementById("sentEmailDisplay").textContent = visitorData.email;
+  lucide.createIcons();
+}
+
+function resetGateToDetails() {
+  document.getElementById("gateDetailsForm").classList.remove("hidden");
+  document.getElementById("gateOtpForm").classList.add("hidden");
+  const sendOtpBtn = document.getElementById("sendOtpBtn");
+  sendOtpBtn.disabled = false;
+  sendOtpBtn.innerHTML = `
+    <i data-lucide="send" class="w-4 h-4"></i>
+    <span>Send Verification OTP</span>
+  `;
+  lucide.createIcons();
+}
+
+function handleVerifyOtp(e) {
+  e.preventDefault();
+  const enteredOtp = document.getElementById("otpInput").value.trim();
+  const otpError = document.getElementById("otpError");
+
+  if (enteredOtp === generatedOtp) {
+    localStorage.setItem("portfolio_access_granted", "true");
+    localStorage.setItem("visitor_name", visitorData.name);
+
+    // Record login to Firebase Firestore
+    db.collection("visitors").add({
+      name: visitorData.name,
+      email: visitorData.email,
+      loginTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      deviceInfo: navigator.userAgent
+    }).then((docRef) => {
+      console.log("Visitor saved to Firestore. ID:", docRef.id);
+    }).catch((err) => {
+      console.error("Firestore logging error:", err);
+    });
+
+    const authGateModal = document.getElementById("authGateModal");
+    authGateModal.classList.add("opacity-0");
+    setTimeout(() => {
+      authGateModal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }, 300);
+
+    showToast("Welcome! Portfolio access verified.");
+  } else {
+    otpError.classList.remove("hidden");
+    document.getElementById("otpInput").classList.add("border-rose-500");
+  }
+}
+
+// ========================================================
+// 3. PROJECTS DATA & DYNAMIC RENDERING
+// ========================================================
+const projectsData = [
+  {
+    id: "python-fullstack-app",
+    title: "Python Full-Stack Web Platform",
+    category: "fullstack",
+    categoryLabel: "Full Stack",
+    description: "Responsive full-stack web application with React frontend, Python backend architecture, and MySQL data management.",
+    tags: ["Python", "React.js", "MySQL", "JavaScript", "Bootstrap"]
+  },
+  {
+    id: "hubfive-uiux",
+    title: "Hubfive Digital UI/UX Design System",
+    category: "uiux",
+    categoryLabel: "UI / UX",
+    description: "Interactive prototype designs, wireframes, and design guidelines created during the UI/UX internship at Hubfive.",
+    tags: ["Canva", "HTML5", "CSS3", "UI/UX", "Wireframing"]
+  },
+  {
+    id: "vcodez-data-analysis",
+    title: "Exploratory Data Science & Analytics",
+    category: "data",
+    categoryLabel: "Data / AI",
+    description: "Data extraction, feature preparation, and visualization pipelines developed during internship at VCODEZ.",
+    tags: ["Python", "Data Science", "MS Excel", "Analysis"]
+  }
+];
+
+function renderProjects(categoryFilter = 'all') {
+  const projectsGrid = document.getElementById('projectsGrid');
+  if (!projectsGrid) return;
+  projectsGrid.innerHTML = '';
+
+  const filtered = categoryFilter === 'all'
+    ? projectsData
+    : projectsData.filter(p => p.category === categoryFilter);
+
+  filtered.forEach(project => {
+    const card = document.createElement('div');
+    card.className = "group flex flex-col justify-between bg-white dark:bg-zinc-900/90 rounded-2xl border border-zinc-200 dark:border-zinc-800/90 p-5 sm:p-6 hover:shadow-xl hover:border-brand-500/40 transition-all duration-300";
+
+    const tagsHtml = project.tags
+      .map(t => `<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">${t}</span>`)
+      .join('');
+
+    card.innerHTML = `
+      <div>
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-brand-600 dark:text-brand-400 bg-brand-500/10 px-2.5 py-0.5 rounded-full">${project.categoryLabel}</span>
+        </div>
+        <h3 class="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-brand-600 transition-colors">${project.title}</h3>
+        <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">${project.description}</p>
+      </div>
+      <div class="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800/80">
+        <div class="flex flex-wrap gap-1.5 mb-4">${tagsHtml}</div>
+      </div>
+    `;
+    projectsGrid.appendChild(card);
+  });
+
+  lucide.createIcons();
+}
+
+// Filter buttons listener
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('active', 'bg-white', 'dark:bg-zinc-800', 'text-zinc-900', 'dark:text-white', 'shadow-sm');
+      b.classList.add('text-zinc-600', 'dark:text-zinc-400');
+    });
+
+    btn.classList.add('active', 'bg-white', 'dark:bg-zinc-800', 'text-zinc-900', 'dark:text-white', 'shadow-sm');
+    btn.classList.remove('text-zinc-600', 'dark:text-zinc-400');
+
+    const cat = btn.getAttribute('data-category');
+    renderProjects(cat);
+  });
+});
+
+// ========================================================
+// 4. THEME & MOBILE MENU CONTROLS
+// ========================================================
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const sunIcon = document.getElementById('sunIcon');
+const moonIcon = document.getElementById('moonIcon');
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    document.documentElement.classList.add('dark');
+    sunIcon.classList.remove('hidden');
+    moonIcon.classList.add('hidden');
+  } else {
+    document.documentElement.classList.remove('dark');
+    sunIcon.classList.add('hidden');
+    moonIcon.classList.remove('hidden');
+  }
+}
+
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    sunIcon.classList.toggle('hidden');
+    moonIcon.classList.toggle('hidden');
+  });
+}
+
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuOpenIcon = document.getElementById('menuOpenIcon');
+const menuCloseIcon = document.getElementById('menuCloseIcon');
+
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', () => {
+    const isHidden = mobileMenu.classList.toggle('hidden');
+    menuOpenIcon.classList.toggle('hidden', !isHidden);
+    menuCloseIcon.classList.toggle('hidden', isHidden);
+  });
+}
+
+// ========================================================
+// 5. UTILITIES (TOAST, CLIPBOARD, CONTACT)
+// ========================================================
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
+  toastMsg.textContent = message;
+  toast.classList.remove('hidden');
+  toast.classList.remove('translate-y-2');
+  lucide.createIcons();
+
+  setTimeout(() => {
+    toast.classList.add('translate-y-2');
+    setTimeout(() => toast.classList.add('hidden'), 200);
+  }, 3500);
+}
+
+function handleResumeDownload(e) {
+  e.preventDefault();
+  const link = document.createElement('a');
+  link.href = 'Parameswaran_R_Resume.pdf';
+  link.download = 'Parameswaran_R_Resume.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast("Downloading resume...");
+}
+
+function copyEmailToClipboard() {
+  navigator.clipboard.writeText("parameshwaranraviroja@gmail.com");
+  const copyBtnText = document.getElementById('copyEmailText');
+  copyBtnText.textContent = "Copied to Clipboard!";
+  showToast("Email address copied to clipboard.");
+  setTimeout(() => copyBtnText.textContent = "Copy Email Address", 2500);
+}
+
+function handleContactSubmit(e) {
+  e.preventDefault();
+  const formSuccessMessage = document.getElementById('formSuccessMessage');
+  formSuccessMessage.classList.remove('hidden');
+  e.target.reset();
+  showToast("Message sent successfully!");
+}
+
+// Page Initialize
+window.onload = function() {
+  initTheme();
+  checkGateAccess();
+  renderProjects('all');
+  lucide.createIcons();
+};
