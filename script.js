@@ -3,7 +3,7 @@
 // ========================================================
 const EMAILJS_PUBLIC_KEY = "5I_LUi2CKLqd2bYPS";
 const EMAILJS_SERVICE_ID = "service_45tqcgh";
-const EMAILJS_TEMPLATE_ID = "v1yj6l3";
+const EMAILJS_TEMPLATE_ID = "template_m1q10cm";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHFRrscUtVNQh_yR0OU_SsD29tqJKOlz0",
@@ -44,6 +44,8 @@ function checkGateAccess() {
   const isVerified = localStorage.getItem("portfolio_access_granted");
   const authGateModal = document.getElementById("authGateModal");
 
+  if (!authGateModal) return;
+
   if (isVerified === "true") {
     authGateModal.classList.add("hidden");
     document.body.style.overflow = "";
@@ -53,7 +55,7 @@ function checkGateAccess() {
   }
 }
 
-// Step 1: Generate & Send OTP via EmailJS
+// Step 1: Send OTP via direct REST API dispatch
 function handleSendOtp(e) {
   e.preventDefault();
   const nameInput = document.getElementById("visitorName");
@@ -63,7 +65,7 @@ function handleSendOtp(e) {
   visitorData.name = nameInput.value.trim();
   visitorData.email = emailInput.value.trim();
 
-  // Generate 6-digit random verification code
+  // Generate 6-digit random code
   generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
   sendOtpBtn.disabled = true;
@@ -75,28 +77,50 @@ function handleSendOtp(e) {
     <span>Sending OTP...</span>
   `;
 
-  const templateParams = {
-    to_name: visitorData.name,
-    to_email: visitorData.email,
-    otp_code: generatedOtp
+  const payload = {
+    service_id: EMAILJS_SERVICE_ID,
+    template_id: EMAILJS_TEMPLATE_ID,
+    user_id: EMAILJS_PUBLIC_KEY,
+    template_params: {
+      to_name: visitorData.name,
+      to_email: visitorData.email,
+      otp_code: generatedOtp
+    }
   };
 
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
-    .then((response) => {
-      console.log("Email dispatch success:", response.status, response.text);
+  fetch("https://api.emailjs.com/api/v1.0/email/send", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(async (res) => {
+    if (res.ok) {
       showOtpInputScreen();
       showToast("OTP sent successfully to your email!");
-    })
-    .catch((error) => {
-      console.error("EmailJS Error:", error);
-      alert("Error sending OTP: " + (error.text || error.message || JSON.stringify(error)));
+    } else {
+      const errText = await res.text();
+      console.error("EmailJS Error:", errText);
+      alert("Error sending OTP: " + errText);
       sendOtpBtn.disabled = false;
       sendOtpBtn.innerHTML = `
         <i data-lucide="send" class="w-4 h-4"></i>
         <span>Send Verification OTP</span>
       `;
       lucide.createIcons();
-    });
+    }
+  })
+  .catch((err) => {
+    console.error("Network error:", err);
+    alert("Network error sending OTP. Please try again.");
+    sendOtpBtn.disabled = false;
+    sendOtpBtn.innerHTML = `
+      <i data-lucide="send" class="w-4 h-4"></i>
+      <span>Send Verification OTP</span>
+    `;
+    lucide.createIcons();
+  });
 }
 
 function showOtpInputScreen() {
@@ -118,7 +142,7 @@ function resetGateToDetails() {
   lucide.createIcons();
 }
 
-// Step 2: Verify OTP & Auto-Log to Firebase Firestore
+// Step 2: Verify OTP & Auto-Log Visitor to Cloud Firestore
 function handleVerifyOtp(e) {
   e.preventDefault();
   const enteredOtp = document.getElementById("otpInput").value.trim();
@@ -128,7 +152,6 @@ function handleVerifyOtp(e) {
     localStorage.setItem("portfolio_access_granted", "true");
     localStorage.setItem("visitor_name", visitorData.name);
 
-    // Record login to Firebase Firestore
     if (db) {
       db.collection("visitors").add({
         name: visitorData.name,
@@ -221,7 +244,6 @@ function renderProjects(categoryFilter = 'all') {
   lucide.createIcons();
 }
 
-// Category filter button click handler
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => {
@@ -249,12 +271,12 @@ function initTheme() {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
     document.documentElement.classList.add('dark');
-    sunIcon.classList.remove('hidden');
-    moonIcon.classList.add('hidden');
+    if (sunIcon) sunIcon.classList.remove('hidden');
+    if (moonIcon) moonIcon.classList.add('hidden');
   } else {
     document.documentElement.classList.remove('dark');
-    sunIcon.classList.add('hidden');
-    moonIcon.classList.remove('hidden');
+    if (sunIcon) sunIcon.classList.add('hidden');
+    if (moonIcon) moonIcon.classList.remove('hidden');
   }
 }
 
@@ -262,8 +284,8 @@ if (themeToggleBtn) {
   themeToggleBtn.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    sunIcon.classList.toggle('hidden');
-    moonIcon.classList.toggle('hidden');
+    if (sunIcon) sunIcon.classList.toggle('hidden');
+    if (moonIcon) moonIcon.classList.toggle('hidden');
   });
 }
 
@@ -272,11 +294,11 @@ const mobileMenu = document.getElementById('mobileMenu');
 const menuOpenIcon = document.getElementById('menuOpenIcon');
 const menuCloseIcon = document.getElementById('menuCloseIcon');
 
-if (mobileMenuBtn) {
+if (mobileMenuBtn && mobileMenu) {
   mobileMenuBtn.addEventListener('click', () => {
     const isHidden = mobileMenu.classList.toggle('hidden');
-    menuOpenIcon.classList.toggle('hidden', !isHidden);
-    menuCloseIcon.classList.toggle('hidden', isHidden);
+    if (menuOpenIcon) menuOpenIcon.classList.toggle('hidden', !isHidden);
+    if (menuCloseIcon) menuCloseIcon.classList.toggle('hidden', isHidden);
   });
 }
 
