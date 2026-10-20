@@ -55,7 +55,7 @@ function checkGateAccess() {
   }
 }
 
-// Step 1: Send OTP via direct REST API dispatch
+// Step 1: Send OTP via Official EmailJS SDK Method
 function handleSendOtp(e) {
   e.preventDefault();
   const nameInput = document.getElementById("visitorName");
@@ -77,50 +77,28 @@ function handleSendOtp(e) {
     <span>Sending OTP...</span>
   `;
 
-  const payload = {
-    service_id: EMAILJS_SERVICE_ID,
-    template_id: EMAILJS_TEMPLATE_ID,
-    user_id: EMAILJS_PUBLIC_KEY,
-    template_params: {
-      to_name: visitorData.name,
-      to_email: visitorData.email,
-      otp_code: generatedOtp
-    }
+  const templateParams = {
+    to_name: visitorData.name,
+    to_email: visitorData.email,
+    otp_code: generatedOtp
   };
 
-  fetch("https://api.emailjs.com/api/v1.0/email/send", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(async (res) => {
-    if (res.ok) {
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+    .then((response) => {
+      console.log("Email dispatch success:", response.status, response.text);
       showOtpInputScreen();
       showToast("OTP sent successfully to your email!");
-    } else {
-      const errText = await res.text();
-      console.error("EmailJS Error:", errText);
-      alert("Error sending OTP: " + errText);
+    })
+    .catch((error) => {
+      console.error("EmailJS Error:", error);
+      alert("Error sending OTP: " + (error.text || error.message || JSON.stringify(error)));
       sendOtpBtn.disabled = false;
       sendOtpBtn.innerHTML = `
         <i data-lucide="send" class="w-4 h-4"></i>
         <span>Send Verification OTP</span>
       `;
       lucide.createIcons();
-    }
-  })
-  .catch((err) => {
-    console.error("Network error:", err);
-    alert("Network error sending OTP. Please try again.");
-    sendOtpBtn.disabled = false;
-    sendOtpBtn.innerHTML = `
-      <i data-lucide="send" class="w-4 h-4"></i>
-      <span>Send Verification OTP</span>
-    `;
-    lucide.createIcons();
-  });
+    });
 }
 
 function showOtpInputScreen() {
