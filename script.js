@@ -65,7 +65,7 @@ function handleSendOtp(e) {
   visitorData.name = nameInput.value.trim();
   visitorData.email = emailInput.value.trim();
 
-  // Generate 6-digit random code
+  // Generate 6-digit random verification code
   generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
   sendOtpBtn.disabled = true;
