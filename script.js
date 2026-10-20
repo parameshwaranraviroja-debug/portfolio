@@ -3,7 +3,7 @@
 // ========================================================
 const EMAILJS_PUBLIC_KEY = "5I_LUi2CKLqd2bYPS";
 const EMAILJS_SERVICE_ID = "service_45tqcgh";
-const EMAILJS_TEMPLATE_ID = "template_m1q10cm";
+const EMAILJS_TEMPLATE_ID = "v1yj6l3";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHFRrscUtVNQh_yR0OU_SsD29tqJKOlz0",
@@ -15,10 +15,24 @@ const firebaseConfig = {
   measurementId: "G-XLWS6MG24X"
 };
 
-// Initialize EmailJS & Firebase
-emailjs.init(EMAILJS_PUBLIC_KEY);
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Safe initialization
+let db = null;
+try {
+  if (typeof firebase !== "undefined") {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+  }
+} catch (e) {
+  console.error("Firebase initialization failed:", e);
+}
+
+try {
+  if (typeof emailjs !== "undefined") {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+} catch (e) {
+  console.error("EmailJS initialization failed:", e);
+}
 
 let generatedOtp = null;
 let visitorData = {};
@@ -39,6 +53,7 @@ function checkGateAccess() {
   }
 }
 
+// Step 1: Generate & Send OTP via EmailJS
 function handleSendOtp(e) {
   e.preventDefault();
   const nameInput = document.getElementById("visitorName");
@@ -48,12 +63,12 @@ function handleSendOtp(e) {
   visitorData.name = nameInput.value.trim();
   visitorData.email = emailInput.value.trim();
 
-  // Generate 6-digit random code
+  // Generate 6-digit random verification code
   generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
   sendOtpBtn.disabled = true;
   sendOtpBtn.innerHTML = `
-    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" fill="none" viewBox="0 0 24 24">
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
     </svg>
@@ -63,17 +78,18 @@ function handleSendOtp(e) {
   const templateParams = {
     to_name: visitorData.name,
     to_email: visitorData.email,
-    otp_code: generatedOtp,
+    otp_code: generatedOtp
   };
 
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-    .then(() => {
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+    .then((response) => {
+      console.log("Email dispatch success:", response.status, response.text);
       showOtpInputScreen();
       showToast("OTP sent successfully to your email!");
     })
     .catch((error) => {
       console.error("EmailJS Error:", error);
-      showToast("Failed to send OTP. Please try again.");
+      alert("Error sending OTP: " + (error.text || error.message || JSON.stringify(error)));
       sendOtpBtn.disabled = false;
       sendOtpBtn.innerHTML = `
         <i data-lucide="send" class="w-4 h-4"></i>
@@ -102,6 +118,7 @@ function resetGateToDetails() {
   lucide.createIcons();
 }
 
+// Step 2: Verify OTP & Auto-Log to Firebase Firestore
 function handleVerifyOtp(e) {
   e.preventDefault();
   const enteredOtp = document.getElementById("otpInput").value.trim();
@@ -112,16 +129,18 @@ function handleVerifyOtp(e) {
     localStorage.setItem("visitor_name", visitorData.name);
 
     // Record login to Firebase Firestore
-    db.collection("visitors").add({
-      name: visitorData.name,
-      email: visitorData.email,
-      loginTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      deviceInfo: navigator.userAgent
-    }).then((docRef) => {
-      console.log("Visitor saved to Firestore. ID:", docRef.id);
-    }).catch((err) => {
-      console.error("Firestore logging error:", err);
-    });
+    if (db) {
+      db.collection("visitors").add({
+        name: visitorData.name,
+        email: visitorData.email,
+        loginTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        deviceInfo: navigator.userAgent
+      }).then((docRef) => {
+        console.log("Visitor saved to Firestore. ID:", docRef.id);
+      }).catch((err) => {
+        console.error("Firestore logging error:", err);
+      });
+    }
 
     const authGateModal = document.getElementById("authGateModal");
     authGateModal.classList.add("opacity-0");
@@ -202,7 +221,7 @@ function renderProjects(categoryFilter = 'all') {
   lucide.createIcons();
 }
 
-// Filter buttons listener
+// Category filter button click handler
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => {
@@ -262,11 +281,13 @@ if (mobileMenuBtn) {
 }
 
 // ========================================================
-// 5. UTILITIES (TOAST, CLIPBOARD, CONTACT)
+// 5. UTILITIES (TOAST, RESUME, CLIPBOARD, CONTACT)
 // ========================================================
 function showToast(message) {
   const toast = document.getElementById('toast');
   const toastMsg = document.getElementById('toastMsg');
+  if (!toast || !toastMsg) return;
+
   toastMsg.textContent = message;
   toast.classList.remove('hidden');
   toast.classList.remove('translate-y-2');
@@ -292,15 +313,17 @@ function handleResumeDownload(e) {
 function copyEmailToClipboard() {
   navigator.clipboard.writeText("parameshwaranraviroja@gmail.com");
   const copyBtnText = document.getElementById('copyEmailText');
-  copyBtnText.textContent = "Copied to Clipboard!";
+  if (copyBtnText) copyBtnText.textContent = "Copied to Clipboard!";
   showToast("Email address copied to clipboard.");
-  setTimeout(() => copyBtnText.textContent = "Copy Email Address", 2500);
+  setTimeout(() => {
+    if (copyBtnText) copyBtnText.textContent = "Copy Email Address";
+  }, 2500);
 }
 
 function handleContactSubmit(e) {
   e.preventDefault();
   const formSuccessMessage = document.getElementById('formSuccessMessage');
-  formSuccessMessage.classList.remove('hidden');
+  if (formSuccessMessage) formSuccessMessage.classList.remove('hidden');
   e.target.reset();
   showToast("Message sent successfully!");
 }
