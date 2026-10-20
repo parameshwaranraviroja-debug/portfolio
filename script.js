@@ -3,7 +3,7 @@
 // ========================================================
 const EMAILJS_PUBLIC_KEY = "5I_LUi2CKLqd2bYPS";
 const EMAILJS_SERVICE_ID = "service_45tqcgh";
-const EMAILJS_TEMPLATE_ID = "v1yj6l3";
+const EMAILJS_TEMPLATE_ID = "template_m1q10cm";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHFRrscUtVNQh_yR0OU_SsD29tqJKOlz0",
