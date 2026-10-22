@@ -38,15 +38,26 @@ let generatedOtp = null;
 let visitorData = {};
 
 // ========================================================
-// 2. OTP AUTHENTICATION GATEWAY (SESSION STORAGE)
+// 2. OTP AUTHENTICATION GATEWAY (TEMPORARILY DISABLED FOR DEV)
 // ========================================================
 function checkGateAccess() {
-  // Clear any legacy persistent storage
-  localStorage.removeItem("portfolio_access_granted");
-
-  // Per-session access check: tab close aanaal access expire aagum
-  const isVerified = sessionStorage.getItem("portfolio_access_granted");
   const authGateModal = document.getElementById("authGateModal");
+
+  // --- [DEV MODE ON] ---
+  // Login modal hide aagidum, website direct-ah open aagum
+  if (authGateModal) {
+    authGateModal.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  /* --------------------------------------------------------
+   * [PRODUCTION ACTIVATION INSTRUCTION]:
+   * Modifications ellam mudinjadhum login thirumba venum na,
+   * mela irukkira block-ai comment pannittu keezhe irukkira
+   * code-ai un-comment seiyungal.
+   * --------------------------------------------------------
+  localStorage.removeItem("portfolio_access_granted");
+  const isVerified = sessionStorage.getItem("portfolio_access_granted");
 
   if (!authGateModal) return;
 
@@ -57,6 +68,7 @@ function checkGateAccess() {
     authGateModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
   }
+  --------------------------------------------------------- */
 }
 
 // Step 1: Send OTP via Official EmailJS SDK Method
@@ -131,7 +143,6 @@ function handleVerifyOtp(e) {
   const otpError = document.getElementById("otpError");
 
   if (enteredOtp === generatedOtp) {
-    // SessionStorage saves session only until tab/browser is closed
     sessionStorage.setItem("portfolio_access_granted", "true");
     sessionStorage.setItem("visitor_name", visitorData.name);
 
