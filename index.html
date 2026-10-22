@@ -60,14 +60,14 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 
-<body class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 font-sans transition-colors duration-300 relative selection:bg-brand-500 selection:text-white">
+<body class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 font-sans transition-colors duration-300 relative selection:bg-blue-600 selection:text-white">
 
   <!-- EMAIL OTP ACCESS GATEWAY MODAL (DEV MODE: BYPASSED) -->
   <div id="authGateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/85 backdrop-blur-xl transition-opacity duration-300">
     <div class="relative w-full max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 shadow-2xl">
       
       <div class="text-center mb-6">
-        <div class="w-12 h-12 mx-auto rounded-2xl bg-brand-500/10 text-brand-500 flex items-center justify-center mb-3">
+        <div class="w-12 h-12 mx-auto rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-3">
           <i data-lucide="shield-check" class="w-6 h-6"></i>
         </div>
         <h2 class="text-2xl font-extrabold text-zinc-900 dark:text-white tracking-tight">Portfolio Access Verification</h2>
@@ -78,15 +78,15 @@
       <form id="gateDetailsForm" onsubmit="handleSendOtp(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">Your Name *</label>
-          <input type="text" id="visitorName" required placeholder="Recruiter / Visitor Name" class="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+          <input type="text" id="visitorName" required placeholder="Recruiter / Visitor Name" class="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
         </div>
 
         <div>
           <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">Email Address *</label>
-          <input type="email" id="visitorEmail" required placeholder="name@company.com" class="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+          <input type="email" id="visitorEmail" required placeholder="name@company.com" class="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
         </div>
 
-        <button type="submit" id="sendOtpBtn" class="w-full py-3 px-6 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm transition-all shadow-md shadow-brand-500/25 flex items-center justify-center gap-2 cursor-pointer">
+        <button type="submit" id="sendOtpBtn" class="w-full py-3 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all shadow-md shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer">
           <i data-lucide="send" class="w-4 h-4"></i>
           <span>Send Verification OTP</span>
         </button>
@@ -94,13 +94,13 @@
 
       <!-- Step 2: OTP Entry Form -->
       <form id="gateOtpForm" onsubmit="handleVerifyOtp(event)" class="space-y-4 hidden mt-2">
-        <div class="p-3 bg-brand-500/10 border border-brand-500/20 rounded-xl text-xs text-brand-600 dark:text-brand-400">
+        <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-600 dark:text-blue-400">
           A 6-digit access code has been dispatched to <strong id="sentEmailDisplay"></strong>.
         </div>
 
         <div>
           <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">Enter 6-Digit OTP *</label>
-          <input type="text" id="otpInput" maxlength="6" required placeholder="123456" class="w-full text-center tracking-[0.5em] text-lg font-mono px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+          <input type="text" id="otpInput" maxlength="6" required placeholder="123456" class="w-full text-center tracking-[0.5em] text-lg font-mono px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
           <p id="otpError" class="text-rose-500 text-xs mt-1 hidden">Invalid OTP code. Please try again.</p>
         </div>
 
@@ -119,7 +119,7 @@
 
   <!-- Ambient Glow Background Accents -->
   <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-    <div class="absolute -top-32 -left-32 w-96 h-96 bg-indigo-500/15 dark:bg-indigo-600/20 rounded-full blur-3xl animate-blob"></div>
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-3xl animate-blob"></div>
     <div class="absolute top-1/3 -right-32 w-96 h-96 bg-cyan-500/15 dark:bg-cyan-500/15 rounded-full blur-3xl animate-blob" style="animation-delay: 3s"></div>
     <div class="absolute bottom-10 left-1/4 w-[30rem] h-[30rem] bg-indigo-600/10 dark:bg-indigo-500/10 rounded-full blur-[100px] animate-blob" style="animation-delay: 6s"></div>
     <div class="absolute inset-0 bg-grid-pattern opacity-80"></div>
@@ -308,12 +308,12 @@
           
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-16">
             <div class="lg:col-span-5 flex justify-center">
-              <div class="relative w-64 h-72 sm:w-72 sm:h-80 rounded-3xl overflow-hidden border-2 border-brand-500/30 shadow-2xl bg-zinc-900 group">
+              <div class="relative w-64 h-72 sm:w-72 sm:h-80 rounded-3xl overflow-hidden border-2 border-blue-500/30 shadow-2xl bg-zinc-900 group">
                 <img src="profile.jpeg" alt="Parameswaran R" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
                 <div class="absolute bottom-4 left-4 right-4">
                   <div class="text-sm font-bold text-white">Parameswaran R</div>
-                  <div class="text-xs text-brand-400 font-mono">M.E. CSE | Software Developer</div>
+                  <div class="text-xs text-blue-400 font-mono">M.E. CSE | Software Developer</div>
                 </div>
               </div>
             </div>
@@ -617,53 +617,134 @@
 
     </main>
 
-    <!-- FOOTER SECTION -->
-    <footer class="border-t border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md py-12 transition-colors duration-300">
+    <!-- MODERN DEVELOPER FOOTER -->
+    <footer class="relative border-t border-zinc-200 dark:border-zinc-800/80 bg-zinc-100/60 dark:bg-zinc-950/80 backdrop-blur-xl pt-16 pb-12 transition-colors duration-300">
+      
+      <!-- Top Subtle Gradient Line Accent -->
+      <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Top Row: Brand & Social Links -->
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-zinc-200/80 dark:border-zinc-800/80">
+        <!-- Main Footer Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-zinc-200 dark:border-zinc-800/80">
           
-          <div class="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
-            <div class="px-2.5 py-1.5 rounded-xl bg-blue-600 text-white font-mono font-bold text-xs tracking-wider shadow-md shadow-blue-500/20">
-              PR
+          <!-- Column 1: Identity & Current Status (5 Cols) -->
+          <div class="md:col-span-5 space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="px-2.5 py-1.5 rounded-xl bg-blue-600 text-white font-mono font-bold text-xs tracking-wider shadow-lg shadow-blue-600/30">
+                PR
+              </div>
+              <span class="font-bold text-lg text-zinc-900 dark:text-white tracking-tight">
+                Parameswaran<span class="text-blue-500">.R</span>
+              </span>
             </div>
-            <div>
-              <div class="font-bold text-sm text-zinc-900 dark:text-white">Parameswaran R</div>
-              <div class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">M.E. CSE Scholar &bull; Software Developer</div>
+
+            <p class="text-sm text-zinc-600 dark:text-zinc-400 max-w-sm leading-relaxed">
+              Postgraduate Scholar in M.E. CSE at SRM Valliammai Engineering College. Focused on building production-ready web apps, security architectures, and machine learning pipelines.
+            </p>
+
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-medium">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>Available for Technical Roles &amp; Collaborations</span>
             </div>
           </div>
 
-          <div class="flex items-center gap-3">
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/parameswaran-r-95ab93331" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-[#0077b5] text-zinc-600 dark:text-zinc-300 hover:text-white border border-zinc-200 dark:border-zinc-800 transition-all duration-200 shadow-sm" title="LinkedIn">
-              <i data-lucide="linkedin" class="w-4 h-4"></i>
-            </a>
+          <!-- Column 2: Quick Links (3 Cols) -->
+          <div class="md:col-span-3 space-y-3">
+            <h4 class="text-xs font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-bold">Navigation</h4>
+            <ul class="space-y-2.5 text-sm text-zinc-600 dark:text-zinc-400">
+              <li>
+                <a href="#about" class="hover:text-blue-500 transition-colors flex items-center gap-1.5 group">
+                  <span class="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  <span>About Profile</span>
+                </a>
+              </li>
+              <li>
+                <a href="#projects" class="hover:text-blue-500 transition-colors flex items-center gap-1.5 group">
+                  <span class="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  <span>Featured Projects</span>
+                </a>
+              </li>
+              <li>
+                <a href="#skills" class="hover:text-blue-500 transition-colors flex items-center gap-1.5 group">
+                  <span class="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  <span>Technical Skills</span>
+                </a>
+              </li>
+              <li>
+                <a href="#certifications" class="hover:text-blue-500 transition-colors flex items-center gap-1.5 group">
+                  <span class="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  <span>Certifications</span>
+                </a>
+              </li>
+              <li>
+                <a href="#contact" class="hover:text-blue-500 transition-colors flex items-center gap-1.5 group">
+                  <span class="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  <span>Contact Form</span>
+                </a>
+              </li>
+            </ul>
+          </div>
 
-            <!-- Instagram -->
-            <a href="https://www.instagram.com/_devils_king_shadow_001?cplk=MTZjeXVvbGlpN2llOQ==" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 text-zinc-600 dark:text-zinc-300 hover:text-white border border-zinc-200 dark:border-zinc-800 transition-all duration-200 shadow-sm" title="Instagram">
-              <i data-lucide="instagram" class="w-4 h-4"></i>
-            </a>
+          <!-- Column 3: Connect Handles Cards (4 Cols) -->
+          <div class="md:col-span-4 space-y-3">
+            <h4 class="text-xs font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-bold">Connect</h4>
+            
+            <div class="space-y-2 font-mono text-xs">
+              <!-- LinkedIn Card -->
+              <a href="https://www.linkedin.com/in/parameswaran-r-95ab93331" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 hover:border-[#0077b5] dark:hover:border-[#0077b5] group transition-all">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg bg-[#0077b5]/10 text-[#0077b5] flex items-center justify-center">
+                    <i data-lucide="linkedin" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <span class="text-zinc-700 dark:text-zinc-300 font-medium">LinkedIn</span>
+                </div>
+                <span class="text-zinc-400 group-hover:text-[#0077b5] transition-colors">↗</span>
+              </a>
 
-            <!-- Email -->
-            <a href="mailto:parameshwaranraviroja@gmail.com" class="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-blue-600 text-zinc-600 dark:text-zinc-300 hover:text-white border border-zinc-200 dark:border-zinc-800 transition-all duration-200 shadow-sm" title="Direct Email">
-              <i data-lucide="mail" class="w-4 h-4"></i>
-            </a>
+              <!-- Instagram Card -->
+              <a href="https://www.instagram.com/_devils_king_shadow_001?cplk=MTZjeXVvbGlpN2llOQ==" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 hover:border-pink-500 dark:hover:border-pink-500 group transition-all">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg bg-pink-500/10 text-pink-500 flex items-center justify-center">
+                    <i data-lucide="instagram" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <span class="text-zinc-700 dark:text-zinc-300 font-medium">@_devils_king_shadow_001</span>
+                </div>
+                <span class="text-zinc-400 group-hover:text-pink-500 transition-colors">↗</span>
+              </a>
+
+              <!-- Email Card -->
+              <a href="mailto:parameshwaranraviroja@gmail.com" class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 hover:border-blue-500 dark:hover:border-blue-500 group transition-all">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center">
+                    <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <span class="text-zinc-700 dark:text-zinc-300 font-medium">Direct Mail</span>
+                </div>
+                <span class="text-zinc-400 group-hover:text-blue-500 transition-colors">↗</span>
+              </a>
+            </div>
           </div>
 
         </div>
 
-        <!-- Bottom Row: Copyright & Navigation Shortcuts -->
-        <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 dark:text-zinc-400 text-center sm:text-left">
-          <div>
-            &copy; 2026 <span class="font-semibold text-zinc-700 dark:text-zinc-300">Parameswaran R</span>. All rights reserved.
+        <!-- Bottom Copyright Row -->
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+          <div class="flex items-center gap-2">
+            <span>&copy; 2026 Parameswaran R.</span>
+            <span class="text-zinc-300 dark:text-zinc-700">•</span>
+            <span class="text-zinc-600 dark:text-zinc-400 font-sans">All rights reserved.</span>
           </div>
 
-          <div class="flex items-center gap-5 font-mono text-[11px]">
-            <a href="#about" class="hover:text-blue-500 transition-colors">About</a>
-            <a href="#projects" class="hover:text-blue-500 transition-colors">Projects</a>
-            <a href="#contact" class="hover:text-blue-500 transition-colors">Contact</a>
-            <a href="#hero" class="hover:text-blue-500 transition-colors font-sans">Back to top ↑</a>
+          <div class="flex items-center gap-6">
+            <span class="text-[11px] text-zinc-400 dark:text-zinc-600 font-sans">Chennai, India</span>
+            <a href="#hero" class="inline-flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors font-medium">
+              <span>Back to top</span>
+              <span class="text-xs">↑</span>
+            </a>
           </div>
         </div>
 
