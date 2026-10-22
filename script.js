@@ -38,13 +38,12 @@ let generatedOtp = null;
 let visitorData = {};
 
 // ========================================================
-// 2. OTP AUTHENTICATION GATEWAY (TEMPORARILY DISABLED FOR DEV)
+// 2. OTP AUTHENTICATION GATEWAY (DEV MODE: BYPASSED)
 // ========================================================
 function checkGateAccess() {
   const authGateModal = document.getElementById("authGateModal");
 
-  // --- [DEV MODE ON] ---
-  // Login modal hide aagidum, website direct-ah open aagum
+  // --- [DEV MODE ON: Free Editing] ---
   if (authGateModal) {
     authGateModal.classList.add("hidden");
     document.body.style.overflow = "";
@@ -52,7 +51,7 @@ function checkGateAccess() {
 
   /* --------------------------------------------------------
    * [PRODUCTION ACTIVATION INSTRUCTION]:
-   * Modifications ellam mudinjadhum login thirumba venum na,
+   * Ungal modifications ellam mudinjadhum login thirumba venum na,
    * mela irukkira block-ai comment pannittu keezhe irukkira
    * code-ai un-comment seiyungal.
    * --------------------------------------------------------
@@ -178,12 +177,22 @@ function handleVerifyOtp(e) {
 // ========================================================
 const projectsData = [
   {
+    id: "safeid-health-cortex",
+    title: "SafeID Health – Privacy-First Health Identity",
+    category: "fullstack",
+    categoryLabel: "Full Stack / Cloud",
+    description: "Emergency health ID platform featuring dynamic QR revocable tokens, 2FA practitioner verification gateway, real-time SMS access notifications, and Supabase cloud persistence.",
+    tags: ["React / Next.js", "Supabase", "PostgreSQL", "Vercel", "2FA OTP", "QR Token"],
+    liveUrl: "https://cortex-connect-gamma.vercel.app/"
+  },
+  {
     id: "python-fullstack-app",
     title: "Python Full-Stack Web Platform",
     category: "fullstack",
     categoryLabel: "Full Stack",
     description: "Responsive full-stack web application with React frontend, Python backend architecture, and MySQL data management.",
-    tags: ["Python", "React.js", "MySQL", "JavaScript", "Bootstrap"]
+    tags: ["Python", "React.js", "MySQL", "JavaScript", "Bootstrap"],
+    liveUrl: null
   },
   {
     id: "hubfive-uiux",
@@ -191,7 +200,8 @@ const projectsData = [
     category: "uiux",
     categoryLabel: "UI / UX",
     description: "Interactive prototype designs, wireframes, and design guidelines created during the UI/UX internship at Hubfive.",
-    tags: ["Canva", "HTML5", "CSS3", "UI/UX", "Wireframing"]
+    tags: ["Canva", "HTML5", "CSS3", "UI/UX", "Wireframing"],
+    liveUrl: null
   },
   {
     id: "vcodez-data-analysis",
@@ -199,7 +209,8 @@ const projectsData = [
     category: "data",
     categoryLabel: "Data / AI",
     description: "Data extraction, feature preparation, and visualization pipelines developed during internship at VCODEZ.",
-    tags: ["Python", "Data Science", "MS Excel", "Analysis"]
+    tags: ["Python", "Data Science", "MS Excel", "Analysis"],
+    liveUrl: null
   }
 ];
 
@@ -220,6 +231,19 @@ function renderProjects(categoryFilter = 'all') {
       .map(t => `<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">${t}</span>`)
       .join('');
 
+    const liveBtnHtml = project.liveUrl
+      ? `<div class="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
+           <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline">
+             <span>Live Project Demo</span>
+             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+           </a>
+           <span class="flex h-2 w-2 relative" title="Live Deployment">
+             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+           </span>
+         </div>`
+      : "";
+
     card.innerHTML = `
       <div>
         <div class="flex items-center justify-between gap-2 mb-3">
@@ -228,8 +252,11 @@ function renderProjects(categoryFilter = 'all') {
         <h3 class="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-brand-600 transition-colors">${project.title}</h3>
         <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">${project.description}</p>
       </div>
-      <div class="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800/80">
-        <div class="flex flex-wrap gap-1.5 mb-4">${tagsHtml}</div>
+      <div>
+        <div class="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800/80">
+          <div class="flex flex-wrap gap-1.5 mb-1">${tagsHtml}</div>
+        </div>
+        ${liveBtnHtml}
       </div>
     `;
     projectsGrid.appendChild(card);
