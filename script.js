@@ -28,7 +28,7 @@ try {
 
 try {
   if (typeof emailjs !== "undefined") {
-    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    emailjs.init(EMAILJS_PUBLIC_KEY);
   }
 } catch (e) {
   console.error("EmailJS initialization failed:", e);
@@ -238,7 +238,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 // ========================================================
-// 4. CERTIFICATIONS & WORKSHOPS (DYNAMIC RENDERING)
+// 4. CERTIFICATIONS DATA & DYNAMIC RENDERING (NEW)
 // ========================================================
 const certificationsData = [
   {
@@ -274,7 +274,7 @@ function renderCertifications() {
 
   certificationsData.forEach((cert) => {
     const card = document.createElement("div");
-    card.className = "flex flex-col justify-between bg-white dark:bg-zinc-900/90 rounded-2xl border border-zinc-200 dark:border-zinc-800/90 p-5 sm:p-6 hover:shadow-xl hover:border-brand-500/40 transition-all duration-300";
+    card.className = "group flex flex-col justify-between bg-white dark:bg-zinc-900/90 rounded-2xl border border-zinc-200 dark:border-zinc-800/90 p-5 sm:p-6 hover:shadow-xl hover:border-brand-500/40 transition-all duration-300";
 
     const tagsHtml = cert.tags
       .map(t => `<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">${t}</span>`)
@@ -293,7 +293,7 @@ function renderCertifications() {
           <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-brand-600 dark:text-brand-400 bg-brand-500/10 px-2.5 py-0.5 rounded-full">${cert.issuer}</span>
           <span class="text-xs text-zinc-500 font-mono">${cert.date}</span>
         </div>
-        <h3 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white mt-1">${cert.title}</h3>
+        <h3 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white mt-1 group-hover:text-brand-500 transition-colors">${cert.title}</h3>
         <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">${cert.description}</p>
         ${verifyBtnHtml}
       </div>
