@@ -177,22 +177,22 @@ function handleVerifyOtp(e) {
 // ========================================================
 const projectsData = [
   {
+    id: "dual-biometric-fraud-detection",
+    title: "Dual-Biometric Credit Card Fraud Prevention System",
+    category: "data",
+    categoryLabel: "Data / AI & FinTech",
+    description: "Proactive fraud prevention mobile app featuring ensemble ML risk scoring (0-100), merchant intelligence analysis, and threshold-based adaptive authentication using fingerprint, facial liveness detection, and OTP triggers[cite: 2].",
+    tags: ["Python", "Ensemble ML", "Scikit-learn", "Android", "Biometrics", "Firebase / SQLite"],
+    liveUrl: null
+  },
+  {
     id: "safeid-health-cortex",
     title: "SafeID Health – Privacy-First Health Identity",
     category: "fullstack",
     categoryLabel: "Full Stack / Cloud",
-    description: "Emergency health ID platform featuring dynamic QR revocable tokens, 2FA practitioner verification gateway, real-time SMS access notifications, and Supabase cloud persistence.",
-    tags: ["React / Next.js", "Supabase", "PostgreSQL", "Vercel", "2FA OTP", "QR Token"],
+    description: "Web-based Health ID platform featuring 15 baseline clinical fields, dynamic revocable QR tokens, 2FA doctor verification gateway, and automated SMS access alerts[cite: 1].",
+    tags: ["React / Next.js", "Supabase", "PostgreSQL", "Vercel API", "2FA OTP", "Dynamic QR"],
     liveUrl: "https://cortex-connect-gamma.vercel.app/"
-  },
-  {
-    id: "python-fullstack-app",
-    title: "Python Full-Stack Web Platform",
-    category: "fullstack",
-    categoryLabel: "Full Stack",
-    description: "Responsive full-stack web application with React frontend, Python backend architecture, and MySQL data management.",
-    tags: ["Python", "React.js", "MySQL", "JavaScript", "Bootstrap"],
-    liveUrl: null
   },
   {
     id: "hubfive-uiux",
