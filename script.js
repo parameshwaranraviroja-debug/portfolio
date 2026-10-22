@@ -557,7 +557,7 @@ function copyEmailToClipboard() {
   }, 2500);
 }
 
-// Direct EmailJS Integration for Contact Form
+// Direct EmailJS Integration for Contact Form (Fixed to_email recipient)
 function handleContactSubmit(e) {
   e.preventDefault();
 
@@ -581,7 +581,8 @@ function handleContactSubmit(e) {
     from_name: name,
     from_email: email,
     message: message,
-    to_name: "Parameswaran R"
+    to_name: "Parameswaran R",
+    to_email: "parameshwaranraviroja@gmail.com"
   };
 
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, contactParams, EMAILJS_PUBLIC_KEY)
