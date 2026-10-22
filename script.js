@@ -2,8 +2,9 @@
 // 1. CREDENTIALS & INITIALIZATION (EMAILJS & FIREBASE)
 // ========================================================
 const EMAILJS_PUBLIC_KEY = "5I_LUi2CKLqd2bYPS";
-const EMAILJS_SERVICE_ID = "service_45tqcgh";
-const EMAILJS_TEMPLATE_ID = "template_m1q1ocm";
+const EMAILJS_SERVICE_ID = "service_ecbq656";               // Updated Service ID
+const EMAILJS_OTP_TEMPLATE_ID = "template_m1q1ocm";         // For visitor access OTP
+const EMAILJS_CONTACT_TEMPLATE_ID = "template_unsn3fa";     // For contact messages
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHFRrscUtVNQh_yR0OU_SsD29tqJKOlz0",
@@ -95,10 +96,11 @@ function handleSendOtp(e) {
   const templateParams = {
     to_name: visitorData.name,
     to_email: visitorData.email,
-    otp_code: generatedOtp
+    otp_code: generatedOtp,
+    otp: generatedOtp
   };
 
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_OTP_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
     .then((response) => {
       console.log("Email dispatch success:", response.status, response.text);
       showOtpInputScreen();
@@ -557,7 +559,7 @@ function copyEmailToClipboard() {
   }, 2500);
 }
 
-// Direct EmailJS Integration for Contact Form (Fixed to_email recipient)
+// Direct EmailJS Integration for Contact Form (Fixed Service ID & Template ID)
 function handleContactSubmit(e) {
   e.preventDefault();
 
@@ -578,14 +580,14 @@ function handleContactSubmit(e) {
   `;
 
   const contactParams = {
-    from_name: name,
-    from_email: email,
+    name: name,
+    email: email,
     message: message,
     to_name: "Parameswaran R",
     to_email: "parameshwaranraviroja@gmail.com"
   };
 
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, contactParams, EMAILJS_PUBLIC_KEY)
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTACT_TEMPLATE_ID, contactParams, EMAILJS_PUBLIC_KEY)
     .then((response) => {
       console.log("Contact email success:", response.status, response.text);
       if (formSuccessMessage) formSuccessMessage.classList.remove('hidden');
