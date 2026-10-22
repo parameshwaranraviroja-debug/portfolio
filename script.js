@@ -51,7 +51,7 @@ function checkGateAccess() {
 
   /* --------------------------------------------------------
    * [PRODUCTION ACTIVATION INSTRUCTION]:
-   * Modifications ellam mudinjadhum login thirumba venum na,
+   * Ungal modifications ellam mudinjadhum login thirumba venum na,
    * mela irukkira block-ai comment pannittu keezhe irukkira
    * code-ai un-comment seiyungal.
    * --------------------------------------------------------
@@ -184,7 +184,7 @@ const projectsData = [
     description: "Proactive fraud prevention mobile app featuring ensemble ML risk scoring (0-100), merchant intelligence analysis, and threshold-based adaptive authentication using fingerprint, facial liveness detection, and OTP triggers.",
     tags: ["Python", "Ensemble ML", "Scikit-learn", "Android", "Biometrics", "Firebase / SQLite"],
     liveUrl: null,
-    hasModal: true
+    pptUrl: "assets/Credit_Card_Fraud_Detection_Presentation.pdf"
   },
   {
     id: "safeid-health-cortex",
@@ -194,7 +194,7 @@ const projectsData = [
     description: "Web-based Health ID platform featuring 15 baseline clinical fields, dynamic revocable QR tokens, 2FA doctor verification gateway, and automated SMS access alerts.",
     tags: ["React / Next.js", "Supabase", "PostgreSQL", "Vercel API", "2FA OTP", "Dynamic QR"],
     liveUrl: "https://cortex-connect-gamma.vercel.app/",
-    hasModal: false
+    pptUrl: null
   },
   {
     id: "hubfive-uiux",
@@ -204,7 +204,7 @@ const projectsData = [
     description: "Interactive prototype designs, wireframes, and design guidelines created during the UI/UX internship at Hubfive.",
     tags: ["Canva", "HTML5", "CSS3", "UI/UX", "Wireframing"],
     liveUrl: null,
-    hasModal: false
+    pptUrl: null
   },
   {
     id: "vcodez-data-analysis",
@@ -214,7 +214,7 @@ const projectsData = [
     description: "Data extraction, feature preparation, and visualization pipelines developed during internship at VCODEZ.",
     tags: ["Python", "Data Science", "MS Excel", "Analysis"],
     liveUrl: null,
-    hasModal: false
+    pptUrl: null
   }
 ];
 
@@ -249,12 +249,12 @@ function renderProjects(categoryFilter = 'all') {
           </span>
         </div>
       `;
-    } else if (project.hasModal) {
+    } else if (project.pptUrl) {
       actionBtnHtml = `
         <div class="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
-          <button onclick="openFraudProjectModal()" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer">
-            <span>View Architecture &amp; System Flow</span>
-            <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          <button onclick="openPresentationModal('${project.pptUrl}')" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer">
+            <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
+            <span>View Presentation &amp; Slides</span>
           </button>
           <span class="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-brand-500/10 text-brand-500">B.E. Capstone</span>
         </div>
@@ -282,81 +282,28 @@ function renderProjects(categoryFilter = 'all') {
   lucide.createIcons();
 }
 
-// Deep-Dive Modal Function for Final Year Capstone Project
-function openFraudProjectModal() {
-  const modal = document.getElementById("projectModal");
-  const modalBody = document.getElementById("projectModalBody");
-  if (!modal || !modalBody) return;
+// Presentation Modal Controls
+function openPresentationModal(url) {
+  const modal = document.getElementById("presentationModal");
+  const iframe = document.getElementById("presentationIframe");
+  const downloadLink = document.getElementById("pptDownloadLink");
 
-  modalBody.innerHTML = `
-    <div class="space-y-6">
-      <div class="border-b border-zinc-200 dark:border-zinc-800 pb-4">
-        <span class="text-xs font-mono uppercase text-brand-500 font-bold">College Final Year Capstone Project</span>
-        <h2 class="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-white mt-1">Dual-Biometric Credit Card Fraud Detection</h2>
-        <p class="text-xs text-zinc-500 font-mono mt-1">Madha Engineering College &bull; CSE (2022-2026)</p>
-      </div>
+  if (!modal || !iframe) return;
 
-      <div>
-        <h3 class="text-sm font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-2">
-          <i data-lucide="shield-alert" class="w-4 h-4 text-brand-500"></i> The Core Problem &amp; Innovation
-        </h3>
-        <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Traditional fraud systems are reactive—detecting anomalies only after transaction settlement. This project prevents fraud in real time before loss occurs through predictive risk scoring, merchant intelligence, and adaptive biometrics.
-        </p>
-      </div>
-
-      <div class="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800">
-        <h3 class="text-sm font-bold text-zinc-900 dark:text-white mb-3 flex items-center gap-2">
-          <i data-lucide="cpu" class="w-4 h-4 text-cyan-500"></i> Adaptive Security Thresholds
-        </h3>
-        <div class="space-y-2 text-xs">
-          <div class="flex justify-between items-center p-2 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-            <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-400">Risk &lt; 50</span>
-            <span class="text-zinc-600 dark:text-zinc-400">Fingerprint + Face ID</span>
-          </div>
-          <div class="flex justify-between items-center p-2 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-            <span class="font-mono font-semibold text-amber-600 dark:text-amber-400">50 &le; Risk &lt; 70</span>
-            <span class="text-zinc-600 dark:text-zinc-400">Fingerprint + Face ID + OTP</span>
-          </div>
-          <div class="flex justify-between items-center p-2 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-            <span class="font-mono font-semibold text-rose-600 dark:text-rose-400">70 &le; Risk &lt; 90</span>
-            <span class="text-zinc-600 dark:text-zinc-400">OTP + Camera Live Face Detection</span>
-          </div>
-          <div class="flex justify-between items-center p-2 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-            <span class="font-mono font-semibold text-rose-700 dark:text-rose-500">Risk &ge; 90</span>
-            <span class="text-zinc-600 dark:text-zinc-400">SMS Alert + Temporary Card Freeze (6h)</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 class="text-sm font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-2">
-          <i data-lucide="database" class="w-4 h-4 text-emerald-500"></i> Technical Architecture
-        </h3>
-        <ul class="text-xs text-zinc-600 dark:text-zinc-400 space-y-1.5 list-disc pl-5 leading-relaxed">
-          <li><strong>Ensemble ML:</strong> Combines SVM, Decision Trees, and Logistic Regression for continuous 0–100 risk probability generation.</li>
-          <li><strong>Merchant Intelligence:</strong> Assesses merchant reputation, past fraud history, and trust scores before settlement.</li>
-          <li><strong>Database Integrity:</strong> Relational schema normalized to 3NF (Users, Cards, Transactions, Merchants, RiskScores) preventing data redundancy.</li>
-          <li><strong>Mobile Implementation:</strong> Android biometric sensors, front-camera liveness detection, and REST API communication.</li>
-        </ul>
-      </div>
-
-      <div class="pt-2 flex justify-end">
-        <button onclick="closeProjectModal()" class="px-5 py-2.5 rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer">
-          Close Overview
-        </button>
-      </div>
-    </div>
-  `;
+  iframe.src = url;
+  if (downloadLink) downloadLink.href = url;
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
   lucide.createIcons();
 }
 
-function closeProjectModal() {
-  const modal = document.getElementById("projectModal");
+function closePresentationModal() {
+  const modal = document.getElementById("presentationModal");
+  const iframe = document.getElementById("presentationIframe");
   if (!modal) return;
+
+  if (iframe) iframe.src = "";
   modal.classList.add("hidden");
   document.body.style.overflow = "";
 }
