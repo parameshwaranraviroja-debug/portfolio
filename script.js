@@ -4,7 +4,7 @@
 const EMAILJS_PUBLIC_KEY = "5I_LUi2CKLqd2bYPS";
 const EMAILJS_SERVICE_ID = "service_ecbq656";               // Active Service ID
 const EMAILJS_OTP_TEMPLATE_ID = "template_m1q1ocm";         // For visitor access OTP
-const EMAILJS_CONTACT_TEMPLATE_ID = "template_unsn3fa";     // Dedicated contact message template
+const EMAILJS_CONTACT_TEMPLATE_ID = "template_unsn3fa";     // For contact inquiry emails
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHFRrscUtVNQh_yR0OU_SsD29tqJKOlz0",
@@ -52,7 +52,7 @@ function checkGateAccess() {
 
   /* --------------------------------------------------------
    * [PRODUCTION ACTIVATION INSTRUCTION]:
-   * Modifications mudinjadhum login thirumba activate panna,
+   * Modifications mudinjadhum login activate panna,
    * mela ulla block-ai comment pannittu keezhe ulla code-ai 
    * un-comment seiyungal.
    * --------------------------------------------------------
@@ -132,7 +132,7 @@ function resetGateToDetails() {
   sendOtpBtn.disabled = false;
   sendOtpBtn.innerHTML = `
     <i data-lucide="send" class="w-4 h-4"></i>
-        <span>Send Verification OTP</span>
+    <span>Send Verification OTP</span>
   `;
   lucide.createIcons();
 }
@@ -231,7 +231,7 @@ function renderProjects(categoryFilter = 'all') {
 
   filtered.forEach(project => {
     const card = document.createElement('div');
-    card.className = "group flex flex-col justify-between bg-white dark:bg-zinc-900/90 rounded-2xl border border-zinc-200 dark:border-zinc-800/90 p-5 sm:p-6 hover:shadow-xl hover:border-brand-500/40 transition-all duration-300";
+    card.className = "group flex flex-col justify-between bg-white dark:bg-zinc-900/90 rounded-2xl border border-zinc-200 dark:border-zinc-800/90 p-5 sm:p-6 hover:shadow-xl hover:border-blue-500/40 transition-all duration-300";
 
     const tagsHtml = project.tags
       .map(t => `<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">${t}</span>`)
@@ -241,7 +241,7 @@ function renderProjects(categoryFilter = 'all') {
     if (project.liveUrl) {
       actionBtnHtml = `
         <div class="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
-          <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline">
+          <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
             <span>Live Project Demo</span>
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           </a>
@@ -254,11 +254,11 @@ function renderProjects(categoryFilter = 'all') {
     } else if (project.hasModal) {
       actionBtnHtml = `
         <div class="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
-          <button onclick="openFraudProjectModal()" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer">
+          <button onclick="openFraudProjectModal()" class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
             <i data-lucide="layers" class="w-3.5 h-3.5"></i>
             <span>View Architecture &amp; System Flow</span>
           </button>
-          <span class="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-brand-500/10 text-brand-500">B.E. Capstone</span>
+          <span class="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-blue-500/10 text-blue-500">B.E. Capstone</span>
         </div>
       `;
     }
@@ -266,9 +266,9 @@ function renderProjects(categoryFilter = 'all') {
     card.innerHTML = `
       <div>
         <div class="flex items-center justify-between gap-2 mb-3">
-          <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-brand-600 dark:text-brand-400 bg-brand-500/10 px-2.5 py-0.5 rounded-full">${project.categoryLabel}</span>
+          <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full">${project.categoryLabel}</span>
         </div>
-        <h3 class="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-brand-600 transition-colors">${project.title}</h3>
+        <h3 class="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-blue-600 transition-colors">${project.title}</h3>
         <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">${project.description}</p>
       </div>
       <div>
@@ -284,7 +284,7 @@ function renderProjects(categoryFilter = 'all') {
   lucide.createIcons();
 }
 
-// Deep-Dive Modal with Architecture, Flow Details & Live Embedded PDF
+// Deep-Dive Modal with Architecture Details
 function openFraudProjectModal() {
   const modal = document.getElementById("projectModal");
   const modalBody = document.getElementById("projectModalBody");
@@ -296,21 +296,21 @@ function openFraudProjectModal() {
       <!-- Modal Header -->
       <div class="border-b border-zinc-200 dark:border-zinc-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <span class="text-xs font-mono uppercase text-brand-500 font-bold">College Final Year Capstone Project</span>
+          <span class="text-xs font-mono uppercase text-blue-500 font-bold">College Final Year Capstone Project</span>
           <h2 class="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-white mt-1">Dual-Biometric Credit Card Fraud Detection</h2>
           <p class="text-xs text-zinc-500 font-mono mt-1">Madha Engineering College &bull; CSE (2022-2026)</p>
         </div>
 
-        <a href="Credit_Card_Fraud_Detection_Presentation.pdf" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition-all self-start sm:self-auto cursor-pointer">
+        <a href="Credit_Card_Fraud_Detection_Presentation.pdf" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all self-start sm:self-auto cursor-pointer">
           <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           <span>Open Full Presentation</span>
         </a>
       </div>
 
-      <!-- Problem & Proposed Solution -->
+      <!-- Problem & Innovation -->
       <div>
         <h3 class="text-sm font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-2">
-          <i data-lucide="shield-alert" class="w-4 h-4 text-brand-500"></i> The Core Problem &amp; Innovation
+          <i data-lucide="shield-alert" class="w-4 h-4 text-blue-500"></i> The Core Problem &amp; Innovation
         </h3>
         <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
           Traditional fraud systems operate reactively—identifying unauthorized transactions only after completion. This application proactively prevents fraudulent activity prior to settlement using real-time machine learning risk scores, merchant credibility analysis, and adaptive multi-factor biometrics.
@@ -355,7 +355,7 @@ function openFraudProjectModal() {
         </ul>
       </div>
 
-      <!-- Live Presentation Viewer Embed -->
+      <!-- Live Presentation Slides -->
       <div>
         <h3 class="text-sm font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-2">
           <i data-lucide="presentation" class="w-4 h-4 text-purple-500"></i> Project Presentation Slides
@@ -369,7 +369,7 @@ function openFraudProjectModal() {
         </div>
       </div>
 
-      <!-- Modal Close Button -->
+      <!-- Close Button -->
       <div class="pt-2 flex justify-end">
         <button onclick="closeProjectModal()" class="px-5 py-2.5 rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer">
           Close Overview
@@ -443,14 +443,14 @@ function renderCertifications() {
 
   certificationsData.forEach((cert) => {
     const card = document.createElement("div");
-    card.className = "group flex flex-col justify-between bg-white dark:bg-zinc-900/90 rounded-2xl border border-zinc-200 dark:border-zinc-800/90 p-5 sm:p-6 hover:shadow-xl hover:border-brand-500/40 transition-all duration-300";
+    card.className = "group flex flex-col justify-between bg-white dark:bg-zinc-900/90 rounded-2xl border border-zinc-200 dark:border-zinc-800/90 p-5 sm:p-6 hover:shadow-xl hover:border-blue-500/40 transition-all duration-300";
 
     const tagsHtml = cert.tags
       .map(t => `<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">${t}</span>`)
       .join("");
 
     const verifyBtnHtml = cert.badgeUrl
-      ? `<a href="${cert.badgeUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline mt-4">
+      ? `<a href="${cert.badgeUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline mt-4">
            <span>Verify Credential</span>
            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
          </a>`
@@ -459,10 +459,10 @@ function renderCertifications() {
     card.innerHTML = `
       <div>
         <div class="flex items-center justify-between gap-2 mb-2">
-          <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-brand-600 dark:text-brand-400 bg-brand-500/10 px-2.5 py-0.5 rounded-full">${cert.issuer}</span>
+          <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full">${cert.issuer}</span>
           <span class="text-xs text-zinc-500 font-mono">${cert.date}</span>
         </div>
-        <h3 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white mt-1 group-hover:text-brand-500 transition-colors">${cert.title}</h3>
+        <h3 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white mt-1 group-hover:text-blue-500 transition-colors">${cert.title}</h3>
         <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">${cert.description}</p>
         ${verifyBtnHtml}
       </div>
@@ -579,6 +579,7 @@ function handleContactSubmit(e) {
     <span>Sending Message...</span>
   `;
 
+  // Matches variables in EmailJS template: {{name}}, {{email}}, {{message}}
   const contactParams = {
     name: name,
     email: email,
@@ -587,6 +588,7 @@ function handleContactSubmit(e) {
     to_email: "parameshwaranraviroja@gmail.com"
   };
 
+  // Uses dedicated contact template: template_unsn3fa
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTACT_TEMPLATE_ID, contactParams, EMAILJS_PUBLIC_KEY)
     .then((response) => {
       console.log("Contact email success:", response.status, response.text);
