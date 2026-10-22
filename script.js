@@ -184,7 +184,7 @@ const projectsData = [
     description: "Proactive fraud prevention mobile app featuring ensemble ML risk scoring (0-100), merchant intelligence analysis, and threshold-based adaptive authentication using fingerprint, facial liveness detection, and OTP triggers.",
     tags: ["Python", "Ensemble ML", "Scikit-learn", "Android", "Biometrics", "Firebase / SQLite"],
     liveUrl: null,
-    pptUrl: "assets/Credit_Card_Fraud_Detection_Presentation.pdf"
+    pptUrl: "Credit_Card_Fraud_Detection_Presentation.pdf"
   },
   {
     id: "safeid-health-cortex",
