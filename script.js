@@ -282,7 +282,7 @@ function renderProjects(categoryFilter = 'all') {
   lucide.createIcons();
 }
 
-// Modal with Technical Overview + Live Presentation Embed
+// Deep-Dive Modal with Architecture, Flow Details & Live Embedded PDF
 function openFraudProjectModal() {
   const modal = document.getElementById("projectModal");
   const modalBody = document.getElementById("projectModalBody");
@@ -291,7 +291,7 @@ function openFraudProjectModal() {
   modalBody.innerHTML = `
     <div class="space-y-6">
       
-      <!-- Header -->
+      <!-- Modal Header -->
       <div class="border-b border-zinc-200 dark:border-zinc-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <span class="text-xs font-mono uppercase text-brand-500 font-bold">College Final Year Capstone Project</span>
@@ -305,7 +305,7 @@ function openFraudProjectModal() {
         </a>
       </div>
 
-      <!-- Problem & Innovation -->
+      <!-- Problem & Proposed Solution -->
       <div>
         <h3 class="text-sm font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-2">
           <i data-lucide="shield-alert" class="w-4 h-4 text-brand-500"></i> The Core Problem &amp; Innovation
@@ -367,7 +367,7 @@ function openFraudProjectModal() {
         </div>
       </div>
 
-      <!-- Modal Footer -->
+      <!-- Modal Close Button -->
       <div class="pt-2 flex justify-end">
         <button onclick="closeProjectModal()" class="px-5 py-2.5 rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer">
           Close Overview
