@@ -38,10 +38,14 @@ let generatedOtp = null;
 let visitorData = {};
 
 // ========================================================
-// 2. OTP AUTHENTICATION GATEWAY
+// 2. OTP AUTHENTICATION GATEWAY (SESSION STORAGE)
 // ========================================================
 function checkGateAccess() {
-  const isVerified = localStorage.getItem("portfolio_access_granted");
+  // Clear any legacy persistent storage
+  localStorage.removeItem("portfolio_access_granted");
+
+  // Per-session access check: tab close aanaal access expire aagum
+  const isVerified = sessionStorage.getItem("portfolio_access_granted");
   const authGateModal = document.getElementById("authGateModal");
 
   if (!authGateModal) return;
@@ -127,8 +131,9 @@ function handleVerifyOtp(e) {
   const otpError = document.getElementById("otpError");
 
   if (enteredOtp === generatedOtp) {
-    localStorage.setItem("portfolio_access_granted", "true");
-    localStorage.setItem("visitor_name", visitorData.name);
+    // SessionStorage saves session only until tab/browser is closed
+    sessionStorage.setItem("portfolio_access_granted", "true");
+    sessionStorage.setItem("visitor_name", visitorData.name);
 
     if (db) {
       db.collection("visitors").add({
@@ -238,7 +243,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 // ========================================================
-// 4. CERTIFICATIONS DATA & DYNAMIC RENDERING (NEW)
+// 4. CERTIFICATIONS DATA & DYNAMIC RENDERING
 // ========================================================
 const certificationsData = [
   {
