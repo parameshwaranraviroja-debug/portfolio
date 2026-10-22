@@ -238,7 +238,77 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 // ========================================================
-// 4. THEME & MOBILE MENU CONTROLS
+// 4. CERTIFICATIONS & WORKSHOPS (DYNAMIC RENDERING)
+// ========================================================
+const certificationsData = [
+  {
+    title: "Artificial Intelligence Fundamentals",
+    issuer: "IBM SkillsBuild",
+    date: "Apr 2026",
+    badgeUrl: "https://www.credly.com/badges/f2018809-3c65-4cf6-900c-b0cc2cc539e0",
+    description: "Core concepts of artificial intelligence, machine learning principles, and enterprise AI workflows.",
+    tags: ["Artificial Intelligence", "Machine Learning", "IBM"]
+  },
+  {
+    title: "CCNA: Introduction to Networks",
+    issuer: "Cisco Networking Academy",
+    date: "Mar 2025",
+    badgeUrl: null,
+    description: "Switch/router configuration, IPv4/IPv6 subnetting, OSI reference model, network troubleshooting, and security.",
+    tags: ["Cisco CCNA", "IPv4 / IPv6", "Routing & Switching", "Network Security"]
+  },
+  {
+    title: "Advanced Cyber-Physical Systems & Intelligent Cybersecurity",
+    issuer: "AICTE ATAL / SRM IST",
+    date: "Sep 2026",
+    badgeUrl: null,
+    description: "Smart infrastructure protection, resilient CPS design, threat mitigation, and cybersecurity frameworks.",
+    tags: ["Cybersecurity", "CPS", "AICTE ATAL", "Smart Infrastructure"]
+  }
+];
+
+function renderCertifications() {
+  const container = document.getElementById("certificationsGrid");
+  if (!container) return;
+  container.innerHTML = "";
+
+  certificationsData.forEach((cert) => {
+    const card = document.createElement("div");
+    card.className = "flex flex-col justify-between bg-white dark:bg-zinc-900/90 rounded-2xl border border-zinc-200 dark:border-zinc-800/90 p-5 sm:p-6 hover:shadow-xl hover:border-brand-500/40 transition-all duration-300";
+
+    const tagsHtml = cert.tags
+      .map(t => `<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">${t}</span>`)
+      .join("");
+
+    const verifyBtnHtml = cert.badgeUrl
+      ? `<a href="${cert.badgeUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline mt-4">
+           <span>Verify Credential</span>
+           <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+         </a>`
+      : "";
+
+    card.innerHTML = `
+      <div>
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-brand-600 dark:text-brand-400 bg-brand-500/10 px-2.5 py-0.5 rounded-full">${cert.issuer}</span>
+          <span class="text-xs text-zinc-500 font-mono">${cert.date}</span>
+        </div>
+        <h3 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white mt-1">${cert.title}</h3>
+        <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">${cert.description}</p>
+        ${verifyBtnHtml}
+      </div>
+      <div class="mt-5 pt-3 border-t border-zinc-100 dark:border-zinc-800/80">
+        <div class="flex flex-wrap gap-1.5">${tagsHtml}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  lucide.createIcons();
+}
+
+// ========================================================
+// 5. THEME & MOBILE MENU CONTROLS
 // ========================================================
 const themeToggleBtn = document.getElementById('themeToggleBtn');
 const sunIcon = document.getElementById('sunIcon');
@@ -281,7 +351,7 @@ if (mobileMenuBtn && mobileMenu) {
 }
 
 // ========================================================
-// 5. UTILITIES (TOAST, RESUME, CLIPBOARD, CONTACT)
+// 6. UTILITIES (TOAST, RESUME, CLIPBOARD, CONTACT)
 // ========================================================
 function showToast(message) {
   const toast = document.getElementById('toast');
@@ -333,5 +403,6 @@ window.onload = function() {
   initTheme();
   checkGateAccess();
   renderProjects('all');
+  renderCertifications();
   lucide.createIcons();
 };
