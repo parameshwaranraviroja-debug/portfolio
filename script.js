@@ -39,27 +39,17 @@ let generatedOtp = null;
 let visitorData = {};
 
 // ========================================================
-// 2. OTP AUTHENTICATION GATEWAY (DEV MODE: BYPASSED)
+// 2. OTP AUTHENTICATION GATEWAY (PRODUCTION MODE: ACTIVATED)
 // ========================================================
 function checkGateAccess() {
   const authGateModal = document.getElementById("authGateModal");
-
-  // --- [DEV MODE ON: Free Editing] ---
-  if (authGateModal) {
-    authGateModal.classList.add("hidden");
-    document.body.style.overflow = "";
-  }
-
-  /* --------------------------------------------------------
-   * [PRODUCTION ACTIVATION INSTRUCTION]:
-   * Modifications mudinjadhum login activate panna,
-   * mela ulla block-ai comment pannittu keezhe ulla code-ai 
-   * un-comment seiyungal.
-   * --------------------------------------------------------
-  localStorage.removeItem("portfolio_access_granted");
-  const isVerified = sessionStorage.getItem("portfolio_access_granted");
-
   if (!authGateModal) return;
+
+  // Clear previous persistent overrides
+  localStorage.removeItem("portfolio_access_granted");
+  
+  // Check session verification
+  const isVerified = sessionStorage.getItem("portfolio_access_granted");
 
   if (isVerified === "true") {
     authGateModal.classList.add("hidden");
@@ -68,7 +58,6 @@ function checkGateAccess() {
     authGateModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
   }
-  --------------------------------------------------------- */
 }
 
 // Step 1: Send OTP via Official EmailJS SDK Method
@@ -579,7 +568,6 @@ function handleContactSubmit(e) {
     <span>Sending Message...</span>
   `;
 
-  // Matches variables in EmailJS template: {{name}}, {{email}}, {{message}}
   const contactParams = {
     name: name,
     email: email,
@@ -588,7 +576,6 @@ function handleContactSubmit(e) {
     to_email: "parameshwaranraviroja@gmail.com"
   };
 
-  // Uses dedicated contact template: template_unsn3fa
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTACT_TEMPLATE_ID, contactParams, EMAILJS_PUBLIC_KEY)
     .then((response) => {
       console.log("Contact email success:", response.status, response.text);
