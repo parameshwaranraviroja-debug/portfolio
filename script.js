@@ -4,7 +4,7 @@
 const EMAILJS_PUBLIC_KEY = "5I_LUi2CKLqd2bYPS";
 const EMAILJS_SERVICE_ID = "service_ecbq656";               // Active Service ID
 const EMAILJS_OTP_TEMPLATE_ID = "template_m1q1ocm";         // For visitor access OTP
-const EMAILJS_CONTACT_TEMPLATE_ID = "template_unsn3fa";     // For contact messages only
+const EMAILJS_CONTACT_TEMPLATE_ID = "template_unsn3fa";     // Dedicated contact message template
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHFRrscUtVNQh_yR0OU_SsD29tqJKOlz0",
@@ -132,7 +132,7 @@ function resetGateToDetails() {
   sendOtpBtn.disabled = false;
   sendOtpBtn.innerHTML = `
     <i data-lucide="send" class="w-4 h-4"></i>
-    <span>Send Verification OTP</span>
+        <span>Send Verification OTP</span>
   `;
   lucide.createIcons();
 }
@@ -579,7 +579,6 @@ function handleContactSubmit(e) {
     <span>Sending Message...</span>
   `;
 
-  // Matches exactly with EmailJS template: {{name}}, {{email}}, {{message}}
   const contactParams = {
     name: name,
     email: email,
@@ -588,7 +587,6 @@ function handleContactSubmit(e) {
     to_email: "parameshwaranraviroja@gmail.com"
   };
 
-  // Uses dedicated contact template: template_unsn3fa
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTACT_TEMPLATE_ID, contactParams, EMAILJS_PUBLIC_KEY)
     .then((response) => {
       console.log("Contact email success:", response.status, response.text);
