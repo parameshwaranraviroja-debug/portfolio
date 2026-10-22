@@ -51,9 +51,9 @@ function checkGateAccess() {
 
   /* --------------------------------------------------------
    * [PRODUCTION ACTIVATION INSTRUCTION]:
-   * Ungal modifications ellam mudinjadhum login thirumba venum na,
-   * mela irukkira block-ai comment pannittu keezhe irukkira
-   * code-ai un-comment seiyungal.
+   * Modifications mudinjadhum login thirumba activate panna,
+   * mela ulla block-ai comment pannittu keezhe ulla code-ai 
+   * un-comment seiyungal.
    * --------------------------------------------------------
   localStorage.removeItem("portfolio_access_granted");
   const isVerified = sessionStorage.getItem("portfolio_access_granted");
@@ -518,7 +518,7 @@ if (mobileMenuBtn && mobileMenu) {
 }
 
 // ========================================================
-// 6. UTILITIES (TOAST, RESUME, CLIPBOARD, CONTACT)
+// 6. UTILITIES (TOAST, RESUME, CLIPBOARD, CONTACT VIA EMAILJS)
 // ========================================================
 function showToast(message) {
   const toast = document.getElementById('toast');
@@ -557,12 +557,52 @@ function copyEmailToClipboard() {
   }, 2500);
 }
 
+// Direct EmailJS Integration for Contact Form
 function handleContactSubmit(e) {
   e.preventDefault();
+
+  const submitBtn = document.getElementById('submitBtn');
   const formSuccessMessage = document.getElementById('formSuccessMessage');
-  if (formSuccessMessage) formSuccessMessage.classList.remove('hidden');
-  e.target.reset();
-  showToast("Message sent successfully!");
+  
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const message = document.getElementById('message').value.trim();
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `
+    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+    </svg>
+    <span>Sending Message...</span>
+  `;
+
+  const contactParams = {
+    from_name: name,
+    from_email: email,
+    message: message,
+    to_name: "Parameswaran R"
+  };
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, contactParams, EMAILJS_PUBLIC_KEY)
+    .then((response) => {
+      console.log("Contact email success:", response.status, response.text);
+      if (formSuccessMessage) formSuccessMessage.classList.remove('hidden');
+      e.target.reset();
+      showToast("Message sent successfully!");
+    })
+    .catch((error) => {
+      console.error("Contact send error:", error);
+      alert("Failed to send message: " + (error.text || error.message || JSON.stringify(error)));
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `
+        <i data-lucide="send" class="w-4 h-4"></i>
+        <span>Send Message</span>
+      `;
+      lucide.createIcons();
+    });
 }
 
 // Page Initialize
