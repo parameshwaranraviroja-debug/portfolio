@@ -2,9 +2,9 @@
 // 1. CREDENTIALS & INITIALIZATION (EMAILJS & FIREBASE)
 // ========================================================
 const EMAILJS_PUBLIC_KEY = "5I_LUi2CKLqd2bYPS";
-const EMAILJS_SERVICE_ID = "service_ecbq656";               // Updated Service ID
+const EMAILJS_SERVICE_ID = "service_ecbq656";               // Active Service ID
 const EMAILJS_OTP_TEMPLATE_ID = "template_m1q1ocm";         // For visitor access OTP
-const EMAILJS_CONTACT_TEMPLATE_ID = "template_unsn3fa";     // For contact messages
+const EMAILJS_CONTACT_TEMPLATE_ID = "template_unsn3fa";     // For contact messages only
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHFRrscUtVNQh_yR0OU_SsD29tqJKOlz0",
@@ -102,12 +102,12 @@ function handleSendOtp(e) {
 
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_OTP_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
     .then((response) => {
-      console.log("Email dispatch success:", response.status, response.text);
+      console.log("OTP email success:", response.status, response.text);
       showOtpInputScreen();
       showToast("OTP sent successfully to your email!");
     })
     .catch((error) => {
-      console.error("EmailJS Error:", error);
+      console.error("OTP send error:", error);
       alert("Error sending OTP: " + (error.text || error.message || JSON.stringify(error)));
       sendOtpBtn.disabled = false;
       sendOtpBtn.innerHTML = `
@@ -559,7 +559,7 @@ function copyEmailToClipboard() {
   }, 2500);
 }
 
-// Direct EmailJS Integration for Contact Form (Fixed Service ID & Template ID)
+// Direct EmailJS Integration for Contact Form
 function handleContactSubmit(e) {
   e.preventDefault();
 
@@ -579,6 +579,7 @@ function handleContactSubmit(e) {
     <span>Sending Message...</span>
   `;
 
+  // Matches exactly with EmailJS template: {{name}}, {{email}}, {{message}}
   const contactParams = {
     name: name,
     email: email,
@@ -587,6 +588,7 @@ function handleContactSubmit(e) {
     to_email: "parameshwaranraviroja@gmail.com"
   };
 
+  // Uses dedicated contact template: template_unsn3fa
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTACT_TEMPLATE_ID, contactParams, EMAILJS_PUBLIC_KEY)
     .then((response) => {
       console.log("Contact email success:", response.status, response.text);
